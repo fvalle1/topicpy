@@ -1,1 +1,1 @@
--i https://test.pypi.org/simple/ topicpy
+--extra-index-url https://test.pypi.org/simple/ topicpy
