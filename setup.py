@@ -5,13 +5,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="topicpy", # Replace with your own username
-    version="1.1.5",
+    version="1.1.6",
     author="Filippo Valle",
     author_email="filippo.valle@unito.it",
     description="Package to extract information from topic models.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/fvalle1/topics",
+    url="https://github.com/fvalle1/topicpy",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
