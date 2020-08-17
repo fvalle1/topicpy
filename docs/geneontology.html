@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>geneontology &#8212; topicpy 1.1.4 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="gtex" href="gtex.html" />
+    <link rel="prev" title="converter" href="converter.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-topicpy.geneontology">
+<span id="geneontology"></span><h1>geneontology<a class="headerlink" href="#module-topicpy.geneontology" title="Permalink to this headline">¶</a></h1>
+<dl class="py attribute">
+<dt id="topicpy.geneontology.geneontology">
+<code class="sig-prename descclassname">topicpy.geneontology.</code><code class="sig-name descname">geneontology</code><a class="headerlink" href="#topicpy.geneontology.geneontology" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#topicpy.geneontology.geneontology" title="topicpy.geneontology.geneontology"><code class="xref py py-class docutils literal notranslate"><span class="pre">topicpy.geneontology.geneontology</span></code></a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="topicpy.geneontology.topic_analysis">
+<code class="sig-prename descclassname">topicpy.geneontology.</code><code class="sig-name descname">topic_analysis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">directory</span></em>, <em class="sig-param"><span class="n">l</span></em>, <em class="sig-param"><span class="n">algorithm</span><span class="o">=</span><span class="default_value">'topsbm'</span></em>, <em class="sig-param"><span class="n">background</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">save_Pvalues</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topicpy/geneontology/geneontology.html#topic_analysis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topicpy.geneontology.topic_analysis" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>directory</strong> – where to find files</p></li>
+<li><p><strong>l</strong> – level of the analisys</p></li>
+<li><p><strong>algorithm</strong> – name of folder and files containing topics table (e.g. path/to/topsbm/topsbm_level_3_topics.csv)</p></li>
+<li><p><strong>background</strong> – List of background genes</p></li>
+<li><p><strong>verbose</strong> – verbosity</p></li>
+<li><p><strong>save_Pvalues</strong> – save data for P-values plot</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="topicpy.geneontology.save_plot_Pvalues">
+<code class="sig-prename descclassname">topicpy.geneontology.</code><code class="sig-name descname">save_plot_Pvalues</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df_topics</span></em>, <em class="sig-param"><span class="n">l</span></em>, <em class="sig-param"><span class="n">directory</span></em>, <em class="sig-param"><span class="n">algorithm</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topicpy/geneontology/geneontology.html#save_plot_Pvalues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topicpy.geneontology.save_plot_Pvalues" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df_topics</strong> – Topics DataFrame</p></li>
+<li><p><strong>l</strong> – level of the analysis</p></li>
+<li><p><strong>directory</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="topicpy.geneontology.get_ontology_df">
+<code class="sig-prename descclassname">topicpy.geneontology.</code><code class="sig-name descname">get_ontology_df</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">topic</span></em>, <em class="sig-param"><span class="n">cutoff</span><span class="o">=</span><span class="default_value">0.05</span></em>, <em class="sig-param"><span class="n">threshhold</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">gene_sets</span><span class="o">=</span><span class="default_value">['GO_Molecular_Function_2018', 'GO_Biological_Process_2018', 'GO_Cellular_Component_2018', 'Human_Phenotype_Ontology', 'GTEx_Tissue_Sample_Gene_Expression_Profiles_up', 'GTEx_Tissue_Sample_Gene_Expression_Profiles_down', 'Tissue_Protein_Expression_from_Human_Proteome_Map', 'KEGG_2019_Human', 'NCI-60_Cancer_Cell_Lines']</span></em>, <em class="sig-param"><span class="n">background</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/topicpy/geneontology/geneontology.html#get_ontology_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#topicpy.geneontology.get_ontology_df" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>topic</strong> – list of genes</p></li>
+<li><p><strong>background</strong> – enrichment test background</p></li>
+<li><p><strong>cutoff</strong> – Enrichments cutoff</p></li>
+<li><p><strong>threshhold</strong> – threshold on Adjusted P-value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">topicpy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="converter.html">converter</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">geneontology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gtex.html">gtex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hsbmpy.html">hsbmpy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hypergeom.html">hypergeom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lda.html">lda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tableanalyser.html">tableanalyser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tacos_plot.html">tacos_plot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TCGA_files.html">TCGA_files</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="converter.html" title="previous chapter">converter</a></li>
+      <li>Next: <a href="gtex.html" title="next chapter">gtex</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Filippo Valle.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/geneontology.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
