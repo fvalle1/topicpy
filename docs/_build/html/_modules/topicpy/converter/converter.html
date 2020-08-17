@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>topicpy.converter.converter &#8212; topicpy 1.1.4 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for topicpy.converter.converter</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://www.genenames.org/cgi-bin/download/custom?col=gd_app_sym&amp;col=md_ensembl_id&amp;status=Approved&amp;status=Entry%20Withdrawn&amp;hgnc_dbtag=on&amp;order_by=gd_app_sym_sort&amp;format=text&amp;submit=submit&quot;</span>
+<span class="n">df_conversion</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+
+<div class="viewcode-block" id="convert_list_to_sybmols"><a class="viewcode-back" href="../../../converter.html#topicpy.converter.convert_list_to_sybmols">[docs]</a><span class="k">def</span> <span class="nf">convert_list_to_sybmols</span><span class="p">(</span><span class="n">ensgs</span><span class="p">):</span>
+	<span class="k">return</span> <span class="p">[</span><span class="n">df_conversion</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">g</span><span class="p">,</span><span class="s2">&quot;Approved symbol&quot;</span><span class="p">]</span>  <span class="k">if</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">df_conversion</span><span class="o">.</span><span class="n">index</span> <span class="k">else</span> <span class="n">g</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">ensgs</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="convert_list_to_ensg"><a class="viewcode-back" href="../../../converter.html#topicpy.converter.convert_list_to_ensg">[docs]</a><span class="k">def</span> <span class="nf">convert_list_to_ensg</span><span class="p">(</span><span class="n">symbols</span><span class="p">):</span>
+	<span class="n">df_inverted</span> <span class="o">=</span> <span class="n">df_conversion</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;Approved symbol&quot;</span><span class="p">)</span>
+	<span class="k">return</span> <span class="p">[</span><span class="n">df_inverted</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">g</span><span class="p">,</span><span class="s2">&quot;Ensembl ID(supplied by Ensembl)&quot;</span><span class="p">]</span>  <span class="k">if</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">df_inverted</span><span class="o">.</span><span class="n">index</span> <span class="k">else</span> <span class="n">g</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">symbols</span><span class="p">]</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">topicpy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../converter.html">converter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../geneontology.html">geneontology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gtex.html">gtex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../hsbmpy.html">hsbmpy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../hypergeom.html">hypergeom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../lda.html">lda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tableanalyser.html">tableanalyser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tacos_plot.html">tacos_plot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../TCGA_files.html">TCGA_files</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Filippo Valle.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
