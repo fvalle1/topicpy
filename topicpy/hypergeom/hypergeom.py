@@ -1,15 +1,15 @@
 import pandas as pd
 import numpy as np
-from scipy.stats import hypergeom 
+from scipy.stats import hypergeom
 
 
 def parameters_for_hypergeometric(list_1, list_2):
     """
-    Returns
-    x num of successes
-    M population size
-    k successes in population
-    N sample size
+    Returns:
+    - x num of successes
+    - M population size
+    - k successes in population
+    - N sample size
     """
     population_size = len(list_1[list_1.index.isin(list_2.index)])
     pop_successes = {module:len(list_2[list_2==module]) for module in list_2.unique()}
@@ -55,17 +55,17 @@ def plot_map(df_cmap, first_name="topsbm", last_name="lda", *args, **kwargs):
     network_lut = dict(zip(df_cmap.columns, network_pal))
     network_col = df_cmap.columns.map(network_lut)
 
-    cm = sns.clustermap(df_cmap, 
-                        row_cluster=False, 
-                        col_cluster=False, 
-                        metric='euclidean', 
+    cm = sns.clustermap(df_cmap,
+                        row_cluster=False,
+                        col_cluster=False,
+                        metric='euclidean',
                         vmin=0,
                         vmax = 30,
-                        cmap='Blues_r', 
+                        cmap='Blues_r',
                         col_colors=network_col,
                         mask=False,
                         cbar_pos=(1.05,0.05,0.05,0.7),
-                        *args, 
+                        *args,
                         **kwargs)
 
     ax = cm.ax_heatmap
