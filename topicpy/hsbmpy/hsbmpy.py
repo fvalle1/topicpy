@@ -739,7 +739,7 @@ def plot_sizes(level, directory, algorithm, ax=None):
     plt.show()
 
 
-def clusteranalysis(directory, labels, algorithm='topsbm'):
+def clusteranalysis(directory, labels, algorithm='topsbm') -> None:
     """
     Perform analyses of an algorithm output
 

@@ -3,13 +3,37 @@ import numpy as np
 from scipy.stats import hypergeom
 
 
-def parameters_for_hypergeometric(list_1, list_2):
+def parameters_for_hypergeometric(list_1: pd.Series, list_2: pd.Series) -> (float, float, float, float, (list, list)):
     """
+    Parameters:
+    - list_1 series
+    - list_2
+
+    lists of elements
+
     Returns:
     - x num of successes
     - M population size
     - k successes in population
     - N sample size
+    - (list_1, list_2) tuple of original lists
+
+    Example:
+
+    l1 = pd.Series(index=["ENSG00000000123", "ENSG00000000456", "ENSG00000000789", "ENSG00000000XXX"], data=["c1", "c1", "c1", "c2"], dtype=str)
+    l2 = pd.Series(index=["ENSG00000000123", "ENSG00000000456", "ENSG00000000789"], data=["c1", "c1", "c1"], dtype=str)
+    x, M, k, N, _ = parameters_for_hypergeometric(l1, l2)
+
+    >>> x
+        c1
+    c1   3
+    c2   0
+    >>> M
+    3
+    >>> k
+    {'c1': 3}
+    >>> N
+    {'c1': 3, 'c2': 1}
     """
     population_size = len(list_1[list_1.index.isin(list_2.index)])
     pop_successes = {module:len(list_2[list_2==module]) for module in list_2.unique()}
