@@ -16,7 +16,7 @@ Install topicpy by running:
 Resources
 ---------
 
-* Online documentation: https://fvalle1.github.io/topicpy/
+* Online documentation: https://topicpy.readthedocs.io/en/latest/
 * Paper: in preparation
 
 Indices and tables

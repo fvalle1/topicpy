@@ -5,8 +5,10 @@ Python package for topic modelling
 [https://topicpy.readthedocs.io/en/latest/](https://topicpy.readthedocs.io/en/latest/)
 
 # Test
+Run unittest with
+
 ``` python
-python -m unittest discover
+python test/test.py
 ```
 
 # License
