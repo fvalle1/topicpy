@@ -1,5 +1,10 @@
+![Python application](https://github.com/fvalle1/topicpy/workflows/Python%20application/badge.svg)
+![CodeQL](https://github.com/fvalle1/topicpy/workflows/CodeQL/badge.svg)
+[![made-with-sphinx-doc](https://img.shields.io/badge/Made%20with-Sphinx-1f425f.svg)](https://www.sphinx-doc.org/)
+![GitHub](https://img.shields.io/github/license/fvalle1/topicpy)
+
 # topicpy
-Python package for topic modelling
+Python package for topic modelling pre and post processing
 
 # Documentation
 [https://topicpy.readthedocs.io/en/latest/](https://topicpy.readthedocs.io/en/latest/)
