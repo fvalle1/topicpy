@@ -7,7 +7,7 @@ def parameters_for_hypergeometric(list_1: pd.Series, list_2: pd.Series) -> (floa
     """
     Parameters:
     - list_1 series
-    - list_2
+    - list_2 series
 
     lists of elements
 
