@@ -122,7 +122,7 @@ def discretize_df_columns(df):
 try:
     df_symbols= pd.read_csv("https://www.genenames.org/cgi-bin/download/custom?col=gd_hgnc_id&col=gd_app_sym&col=gd_pub_ensembl_id&col=md_ensembl_id&col=md_eg_id&status=Approved&status=Entry%20Withdrawn&hgnc_dbtag=on&order_by=gd_app_sym_sort&format=text&submit=submit", index_col=[0], sep='\t')
 except:
-    df_symbols = pd.read_csv("gene_conversion.txt", index_col=[0], sep='\t')
+    df_symbols = pd.read_csv("https://raw.githubusercontent.com/fvalle1/topicpy/develop/topicpy/tableanalyser/gene_conversions.txt", index_col=[0], sep='\t')
 
 def get_symbol(ensg):
     '''
