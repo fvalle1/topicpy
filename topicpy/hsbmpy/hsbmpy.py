@@ -551,6 +551,16 @@ def get_tissue_style(tissue):
         c = 'darkgray'
     elif 'estis' in tissue:
         c = 'darkkhaki'
+    elif 'LumA' in tissue:
+        c = 'pink'
+    elif 'LumB' in tissue:
+        c = 'purple'
+    elif 'Normal' in tissue:
+        c = 'blue'
+    elif 'Basal' in tissue:
+        c = 'darkred'
+    elif 'Her2' in tissue:
+        c = "green"
     else:
         c = 'k'
     return (marker, c, ls)
@@ -789,7 +799,7 @@ def clusteranalysis(directory, labels, algorithm='topsbm') -> None:
                     plot_maximum_label(clustersinfo,label,level, directory,clustersinfo_shuffle,algorithm=algorithm)
                     plot_labels_size(clustersinfo,label,level, directory,clustersinfo_shuffle,algorithm=algorithm)
     ##define scores
-    scores = get_scores(directory, labels)
+    scores = get_scores(directory, labels, algorithm=algorithm)
     try:
         xl = getclustersizesarray(directory, l_max)
         with open("%s/clustersizes.txt" % directory, 'w') as f:
@@ -808,7 +818,7 @@ def clusteranalysis(directory, labels, algorithm='topsbm') -> None:
 
     # save files for R analisys
     for l_max in np.arange(l_max + 1):
-        pd.DataFrame(data=define_labels(get_cluster_given_l(l_max, directory), df_files, label=labels[0])[1],
+        pd.DataFrame(data=define_labels(get_cluster_given_l(l_max, directory, algorithm=algorithm), df_files, label=labels[0])[1],
                      columns=['l%d' % l_max]).to_csv("%s/%s/%s_level_%d_labels.csv" % (directory, algorithm, algorithm, l_max),
                                                      header=True,
                                                      index=False)
