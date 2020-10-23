@@ -1,4 +1,4 @@
-#  Copyright (c) 2019 fvalle
+#  Copyright (c) 2020 fvalle
 #
 #  Permission is hereby granted, free of charge, to any person
 #  obtaining a copy of this software and associated documentation
@@ -40,14 +40,14 @@ def get_ontology_df(topic, cutoff=0.05, threshhold=5e-1, gene_sets = ['GO_Molecu
              'Tissue_Protein_Expression_from_Human_Proteome_Map',
              'KEGG_2019_Human',
              'NCI-60_Cancer_Cell_Lines'
-            ], background=None):
+            ], background=None) -> pd.DataFrame:
     """
 
     :param topic: list of genes
     :param background: enrichment test background
     :param cutoff: Enrichments cutoff
     :param threshhold: threshold on Adjusted P-value
-    :return:
+    :return: DataFrame with terms and P-vals
     """
     sets = ','.join(gene_sets)
     if background is None:
