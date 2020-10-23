@@ -776,9 +776,9 @@ def clusteranalysis(directory, labels, algorithm='topsbm') -> None:
     Perform analyses of an algorithm output
 
     Parameters:
-    - directory: where to search the data
-    - labels: ground truth label to search. This should be in a file called directory/files.dat
-    - algorithm: name of the folder in which data are stored
+    :param directory: where to search the data
+    :param labels: ground truth label to search. This should be in a file called directory/files.dat
+    :param algorithm: name of the folder in which data are stored
     """
     l_max = get_max_available_L(directory, algorithm)
     df_clusters = pd.read_csv("%s/%s/%s_level_%d_clusters.csv" % (directory, algorithm, algorithm, l_max), header=[0])

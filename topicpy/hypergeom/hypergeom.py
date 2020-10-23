@@ -29,12 +29,13 @@ from scipy.stats import hypergeom
 def parameters_for_hypergeometric(list_1: pd.Series, list_2: pd.Series) -> (float, float, float, float, (list, list)):
     """
     Parameters:
-    - list_1 series
-    - list_2 series
+    :param list_1 series
+    :param list_2 series
 
     lists of elements
 
     Returns:
+    :return:
     - x num of successes
     - M population size
     - k successes in population
