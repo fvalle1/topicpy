@@ -22,7 +22,7 @@ copyright = '2020, Filippo Valle'
 author = 'Filippo Valle'
 
 # The full version, including alpha/beta/rc tags
-release = '1.1.5'
+release = '1.1.9.0'
 
 
 # -- General configuration ---------------------------------------------------
