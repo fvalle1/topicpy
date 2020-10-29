@@ -33,7 +33,7 @@ from matplotlib.colors import Normalize
 def scatterdense(x, y, ax=None, nbins=80, colorbar=False, c_title="density", **kwargs) -> None:
     """
     Plot a scatter plot with density
-    Parameters:
+    
     :param: x: list of first variable
     :param: y: list of second variable
     :param: ax: matplotlib.pyplot.Axes add here or create a new one
