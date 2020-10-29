@@ -28,7 +28,8 @@ import numpy as np
 
 def get_generic_tissue_from_specific(tissue, samples=None):
     """
-    Returns tissue (SMTS) given a subtissue
+    :param tissue: tissue
+    :return: tissue (SMTS) given a subtissue
     """
     if tissue in samples['secondary_site']:
         return samples[samples['secondary_site']==tissue]['primary_site'].values[0]
@@ -37,7 +38,8 @@ def get_generic_tissue_from_specific(tissue, samples=None):
 
 def get_specific_mapping_to(tissue, samples=None):
     """
-    Returns all subtissues (SMTSD) of tissue
+    :param tissue: tissue
+    :return: all subtissues (SMTSD) of tissue
     """
     if tissue in samples['primary_site']:
         return samples[samples['primary_site']==tissue]['secondary_site'].unique()
@@ -46,7 +48,8 @@ def get_specific_mapping_to(tissue, samples=None):
 
 def get_gtex_tissue(sample, samples=None):
     """
-    Returns the tissue of sample from GTEx data
+    :param str sample: sample id
+    :return: the tissue of sample from GTEx data
     """
     for fullsample in samples.index.values:
         if sample in fullsample:

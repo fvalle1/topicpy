@@ -34,13 +34,13 @@ def scatterdense(x, y, ax=None, nbins=80, colorbar=False, c_title="density", **k
     """
     Plot a scatter plot with density
     
-    :param: x: list of first variable
-    :param: y: list of second variable
-    :param: ax: matplotlib.pyplot.Axes add here or create a new one
-    :param: nbins: number of bins
-    :param: colorbar: plot colorbar
-    :param: c_title: color bar title
-    :param: **kargs: arguments to be passed to matplotlib.pyplot.scatter
+    :param x: list of first variable
+    :param y: list of second variable
+    :param ax: matplotlib.pyplot.Axes add here or create a new one
+    :param nbins: number of bins
+    :param colorbar: plot colorbar
+    :param c_title: color bar title
+    :param **kargs: arguments to be passed to matplotlib.pyplot.scatter
     """
     xmin = np.log10(min(x[x>0]))
     xmax = np.log10(max(x))
