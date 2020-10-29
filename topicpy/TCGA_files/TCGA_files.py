@@ -48,6 +48,11 @@ fields = [
 fields = ','.join(fields)
 
 def queryFile(idFile):
+    """
+    Get information for file
+    
+    :param str idFile: file TCGA-id
+    """
     filters = {
     "op": "in",
     "content":{
@@ -117,6 +122,11 @@ def makeTopicPie(df, level, whatToLookFor = ['disease_type']):
     fig.savefig("topic_pie_level_%d.png"%level)
 
 def queryFiles(files):
+    """
+    Get infor for a list of files
+    
+    :param list files: list of TCGA-ids
+    """
     df = pd.DataFrame(columns=fields.split(','))
     for i,f  in enumerate(files):
         df = df.append(queryFile(f), ignore_index=True, sort=True)
@@ -125,6 +135,11 @@ def queryFiles(files):
 
 
 def get_tcga_tissue(sample):
+    """
+    Get primary_site of tcga sample
+    
+    :param str sample: sample id
+    """
     samples = pd.read_csv("/Users/filippo/Developer/tesi/results/fpkm_all/files.dat", index_col=[0], header=0)
     for fullsample in samples.index.values:
         if sample in fullsample:

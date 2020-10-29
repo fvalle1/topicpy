@@ -27,7 +27,9 @@ df_conversion = pd.read_csv(url, sep="\t", index_col=1).dropna()
 
 def convert_list_to_sybmols(ensgs: list) -> list:
 	"""
-	is converts a list of ENSG to gene names
+	it converts a list of ENSG to gene names
+    
+    :param ensgs: list of ENSG
 
 	convert_list_to_sybmols(["ENSG00000159763"])
 	"""
@@ -36,6 +38,8 @@ def convert_list_to_sybmols(ensgs: list) -> list:
 def convert_list_to_ensg(symbols: list) -> list:
 	"""
 	it converts a list of gene names to ENSG identifiers
+
+    :param symbols: list of gene symbols
 
 	convert_list_to_sybmols(["PIP"])
 	"""

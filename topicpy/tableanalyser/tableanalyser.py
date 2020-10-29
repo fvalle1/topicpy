@@ -34,11 +34,10 @@ def geneinfo(genename, df, nfiles,metric='fpkm'):
     """Extimate mean and var for a ENSG gene
 
     Keyword arguments:
-    genename -- ENSG
-    genedata -- list or array-like object across tissues
+    :param genename: ENSG
+    :param genedata: list or array-like object across tissues
 
-    Return:
-    genedict
+    :return:  gene dictionary
     """
     #gene = 123
     #genename = df['gene'][gene]
@@ -150,6 +149,8 @@ except:
 def get_symbol(ensg):
     '''
     convert ensg to symbol
+    
+    :param str ensg:
     '''
     if ensg[:15] in df_symbols['Ensembl gene ID'].values:
         return df_symbols[df_symbols['Ensembl gene ID']==ensg[:15]]['Approved symbol'].values[0]
@@ -159,6 +160,8 @@ def get_symbol(ensg):
 def get_ensg(description):
     '''
     convert descr to ensg
+    
+    :param str description:
     '''
     if description in df_symbols['Approved symbol'].values:
         return df_symbols[df_symbols['Approved symbol']==description]['Ensembl gene ID']
@@ -268,7 +271,7 @@ def plotoverpoints(means, variances, over_plot, ax=None, normalisation_str = "co
 
 def getovergenes(df_mv, func, method='sampling', distance=10, how_many_sigmas=3, knee=100):
     '''
-    \param method can be 'sampling', 'sigma'
+    :param method: can be 'sampling', 'sigma'
     '''
     over = []
     if 'sigma' in method:
