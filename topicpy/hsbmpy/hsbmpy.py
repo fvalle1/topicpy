@@ -775,7 +775,6 @@ def clusteranalysis(directory, labels, algorithm='topsbm') -> None:
     """
     Perform analyses of an algorithm output
 
-    Parameters:
     :param directory: where to search the data
     :param labels: ground truth label to search. This should be in a file called directory/files.dat
     :param algorithm: name of the folder in which data are stored
