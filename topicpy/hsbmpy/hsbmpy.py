@@ -33,63 +33,84 @@ sns.set()
 sns.set_context("paper")
 from sklearn import metrics
 
-# get colors from https://medialab.github.io/iwanthue/ or artenatevly from http://phrogz.net/css/distinct-colors.html
-colors_cycle = ["#a257d4",
-                "#e090bf",
-                "#64c9a3",
-                "#4b68ae",
-                "#dc8c2f",
-                "#cd41a7",
-                "#d9344f",
-                "#bc599a",
-                "#afa1e8",
-                "#48c1d8",
-                "#b54545",
-                "#919233",
-                "#9a78be",
-                "#59602a",
-                "#4e8e2c",
-                "#9db935",
-                "#9b563c",
-                "#e482df",
-                "#5995d3",
-                "#6a5198",
-                "#b05f84",
-                "#b563c3",
-                "#5f6b18",
-                "#a55c21",
-                "#5754c2",
-                "#277257",
-                "#4f9b5e",
-                "#8b6b29",
-                "#b8381c",
-                "#ad2f62",
-                "#97ba6d",
-                "#45c37c",
-                "#5fc250",
-                "#8c4c7b",
-                "#e06e87",
-                "#e2672a",
-                "#db7756",
-                "#974858",
-                "#35743b",
-                "#bbaf6c",
-                "#8c4099",
-                "#e44586",
-                "#ed5c4c",
-                "#389c84",
-                "#cfae3d",
-                "#eda377",
-                "#778749",
-                "#c5935a",
-                "#de8784",
-                "#757eec"]
+class painter():
+    def __init__(self):
+        """
+        Painter iteator over list of colors
 
-def get_next_color():
-    for color in colors_cycle:
-        yield color
+        :return : painter
 
-color_iterator = get_next_color()
+        Usage
+        =====
+        p = painter()
+        next(p)
+        """
+        # get colors from https://medialab.github.io/iwanthue/ or artenatevly from http://phrogz.net/css/distinct-colors.html
+        self.colors_cycle = ["#a257d4",
+                            "#e090bf",
+                            "#64c9a3",
+                            "#4b68ae",
+                            "#dc8c2f",
+                            "#cd41a7",
+                            "#d9344f",
+                            "#bc599a",
+                            "#afa1e8",
+                            "#48c1d8",
+                            "#b54545",
+                            "#919233",
+                            "#9a78be",
+                            "#59602a",
+                            "#4e8e2c",
+                            "#9db935",
+                            "#9b563c",
+                            "#e482df",
+                            "#5995d3",
+                            "#6a5198",
+                            "#b05f84",
+                            "#b563c3",
+                            "#5f6b18",
+                            "#a55c21",
+                            "#5754c2",
+                            "#277257",
+                            "#4f9b5e",
+                            "#8b6b29",
+                            "#b8381c",
+                            "#ad2f62",
+                            "#97ba6d",
+                            "#45c37c",
+                            "#5fc250",
+                            "#8c4c7b",
+                            "#e06e87",
+                            "#e2672a",
+                            "#db7756",
+                            "#974858",
+                            "#35743b",
+                            "#bbaf6c",
+                            "#8c4099",
+                            "#e44586",
+                            "#ed5c4c",
+                            "#389c84",
+                            "#cfae3d",
+                            "#eda377",
+                            "#778749",
+                            "#c5935a",
+                            "#de8784",
+                            "#757eec"]
+        self.available_colors = len(self.colors_cycle)
+        self._index = -1
+
+    def __iter__(self):
+        self._index = -1
+        return self
+
+    def __next__(self):
+        self._index += 1
+        if self._index >= self.available_colors:
+            self._index = 0
+        return self.colors_cycle[self._index]
+
+
+color_iterator = painter()
 
 def plot_cluster_composition(fraction_sites, directory, level, normalise=False, label='primary_site', shuffled=False,
                              algorithm='topsbm'):
@@ -125,8 +146,7 @@ def fraction_bar_plot(x, fraction_sites, ax=None):
         fig = plt.figure(figsize=(15, 8))
         ax = fig.subplots()
     bottom = np.zeros(len(x))
-    ymax = 0
-    color_iterator = (color for color in colors_cycle)
+    color_iterator = painter()
     for site, data in fraction_sites.items():
         if np.max(data) == 0:
             continue
@@ -158,20 +178,8 @@ def get_Palette(site):
             return palette_map[k]
 
 
-current_color = -1
-
-
-def get_color_cycle():
-    global current_color
-    current_color += 1
-    if current_color >= len(colors_cycle):
-        current_color = 0
-    return colors_cycle[current_color]
-
-
 def get_cluster_given_l(l, directory, algorithm='topsbm'):
-    df_clusters = pd.read_csv("%s/%s/%s_level_%d_clusters.csv" % (directory, algorithm, algorithm, l), header=[0],
-                              index_col=None)
+    df_clusters = pd.read_csv("%s/%s/%s_level_%d_clusters.csv" % (directory, algorithm, algorithm, l), header=[0], index_col=None)
     cluster = {}
     for i, c in enumerate(df_clusters.columns):
         cluster[i] = df_clusters[c].dropna().values
@@ -810,16 +818,18 @@ def clusteranalysis(directory, labels, algorithm='topsbm') -> None:
                         plot_sizes(level,directory, algorithm=algorithm)
                 except:
                     print(*sys.exc_info())
-                continue
-                shuffle_files(df_files,label).to_csv("%s/files_shuffles.dat"%directory, index=True)
-                fraction_sites_shuffle = get_fraction_sites(cluster, df_files=pd.read_csv("%s/files_shuffles.dat"%directory, index_col=[0]),label=label, normalise=normalise)
-                clustersinfo_shuffle = get_clustersinfo(cluster, fraction_sites_shuffle)
-                plot_cluster_composition(fraction_sites_shuffle,directory,level, label=label, shuffled=True, normalise=normalise, algorithm=algorithm)
-                if not normalise:
-                    plot_maximum(clustersinfo,cluster,label,level,directory,clustersinfo_shuffle,algorithm=algorithm)
-                    plot_maximum_size(clustersinfo,label,level, directory,clustersinfo_shuffle,algorithm=algorithm)
-                    plot_maximum_label(clustersinfo,label,level, directory,clustersinfo_shuffle,algorithm=algorithm)
-                    plot_labels_size(clustersinfo,label,level, directory,clustersinfo_shuffle,algorithm=algorithm)
+                try:
+                    shuffle_files(df_files,label).to_csv("%s/files_shuffles.dat"%directory,index=True)
+                    fraction_sites_shuffle = get_fraction_sites(cluster, df_files=pd.read_csv("%s/files_shuffles.dat"%directory,index_col=[0]),label=label, normalise=normalise)
+                    clustersinfo_shuffle = get_clustersinfo(cluster, fraction_sites_shuffle)
+                    plot_cluster_composition(fraction_sites_shuffle,directory,level, label=label, shuffled=True, normalise=normalise, algorithm=algorithm)
+                    if not normalise:
+                        plot_maximum(clustersinfo,cluster,label,level,directory,clustersinfo_shuffle,algorithm=algorithm)
+                        plot_maximum_size(clustersinfo,label,level, directory,clustersinfo_shuffle,algorithm=algorithm)
+                        plot_maximum_label(clustersinfo,label,level, directory,clustersinfo_shuffle,algorithm=algorithm)
+                        plot_labels_size(clustersinfo,label,level, directory,clustersinfo_shuffle,algorithm=algorithm)
+                except:
+                    print(*sys.exc_info())
     ##define scores
     scores = get_scores(directory, labels, algorithm=algorithm)
     try:
@@ -842,8 +852,7 @@ def clusteranalysis(directory, labels, algorithm='topsbm') -> None:
     for l_max in np.arange(l_max + 1):
         pd.DataFrame(data=define_labels(get_cluster_given_l(l_max, directory, algorithm=algorithm), df_files, label=labels[0])[1],
                      columns=['l%d' % l_max]).to_csv("%s/%s/%s_level_%d_labels.csv" % (directory, algorithm, algorithm, l_max),
-                                                     header=True,
-                                                     index=False)
+                                                     header=True,index=False)
 
 
 def get_max_available_L(directory, algorithm='topsbm'):
