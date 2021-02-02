@@ -1,11 +1,11 @@
 import unittest
 import topicpy
-
+import ssl;ssl._create_default_https_context=ssl._create_unverified_context
 
 class TopicTest(unittest.TestCase):
     def test_load(self):
-        self.assertEqual("1", topicpy.__version__[0])
-        self.assertEqual("1", topicpy.__version__.split(".")[1])
+        self.assertEqual("0", topicpy.__version__[0])
+        self.assertEqual("0", topicpy.__version__.split(".")[1])
 
     def test_hypergeom(self):
         import pandas as pd
