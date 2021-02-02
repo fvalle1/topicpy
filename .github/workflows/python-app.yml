@@ -26,7 +26,7 @@ jobs:
         pip install pytest
         pip install pandarallel sklearn tensorflow tensorflow_probability pandas matplotlib seaborn gseapy lxml
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        pip install -i https://test.pypi.org/simple topicpy
+        python3 setup.py install
     - name: Test with pytest
       run: |
         python test/test.py
