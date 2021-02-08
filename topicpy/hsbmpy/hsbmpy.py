@@ -199,7 +199,7 @@ def get_topic_given_l(l, directory, algorithm='topsbm'):
 def get_fraction_sites(cluster, df_files, label='primary_site', normalise=False):
     fraction_sites = {}
     c_fraction_site = {}
-    for site in df_files[label].dropna().unique():
+    for site in np.concatenate([df_files[label].dropna().unique(), ["unknown"]]):
         fraction_sites[site] = []
         c_fraction_site[site] = 0
 
@@ -209,12 +209,9 @@ def get_fraction_sites(cluster, df_files, label='primary_site', normalise=False)
             if foundsample is not None:
                 c_fraction_site[foundsample[label]] += 1
             else:
-                if 'unknown' in fraction_sites.keys():
-                    c_fraction_site['unknown'] += 1
-                else:
-                    c_fraction_site['unknown'] = 1
-                    fraction_sites['unknown'] = []
-        for site in fraction_sites:
+                c_fraction_site['unknown'] += 1
+
+        for site in fraction_sites.keys():
             if normalise:
                 norm = float(len(cluster[i]))
             else:
@@ -226,11 +223,14 @@ def get_fraction_sites(cluster, df_files, label='primary_site', normalise=False)
             c_fraction_site[site] = 0
     df = pd.DataFrame(data=fraction_sites).dropna(how='all', axis=0)
     ##put first columns that have high values in average
-    avgs = df.apply(lambda x: np.average(x.to_numpy()[x.to_numpy().nonzero()[0]]), axis=0)
+    avgs = df.apply(lambda x: np.average(
+        x.to_numpy()[x.to_numpy().nonzero()[0]]), axis=0)
     df = df.transpose()
     df.insert(0, 'avg', avgs)
-    df = df.sort_values(by=['avg'], axis=0, ascending=False).drop('avg', axis=1).transpose()
-    df = df.sort_values(by=[tissue for tissue in df.columns], axis=0, ascending=False)
+    df = df.sort_values(by=['avg'], axis=0, ascending=False).drop(
+        'avg', axis=1).transpose()
+    df = df.sort_values(
+        by=[tissue for tissue in df.columns], axis=0, ascending=False)
     return df.sort_index(1).to_dict(orient='list')
 
 
