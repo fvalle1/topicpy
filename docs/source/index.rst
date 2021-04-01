@@ -11,7 +11,18 @@ Installation
 
 Install topicpy by running:
 
-   pip install -i https://test.pypi.org/simple/ topicpy
+   pip install topicpy
+
+This package consists of multiple modules:
+
+- converter: handels gene name conversions
+- geneontology: uses GSEA to perform gene ontologies
+- gtex: handle GTEx data
+- hsbmpy: handle ouput of hierarchical stochastic block model
+- hypergeom: perform hypergeometric tests
+- lda: Run sklearn LatenDirichletAllocation with some more parameters
+- tableanalyser: study distributions of a RNA-Seq data
+- TCGA_files: handle TCGA metadata
 
 Resources
 ---------
@@ -25,7 +36,6 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
 
 
 .. toctree::
