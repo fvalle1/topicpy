@@ -1,0 +1,5 @@
+0.0.2:
+- add painter
+
+0.0.1:
+- first version on pypi servers
