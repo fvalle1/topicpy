@@ -429,6 +429,7 @@ def add_score_lines(ax, scores, V="V", labels=None, h=False, c=False, alpha=0.8,
     colors = {
         'primary_site': 'blue',
         'hsbm': 'blue',
+        'trisbm': 'purple',
         'secondary_site': 'red',
         'status': 'red',
         'hSBM': 'blue',
@@ -627,6 +628,15 @@ def add_tumor_location(df_files):
 
 
 def get_scores(directory, labels, df_files=None, algorithm='topsbm', verbose=False, metric=metrics.cluster.v_measure_score):
+    """
+    :param directory: path to output
+    :param labels: name of df_files column
+    :param df_files: DataFrame of metadata
+    :param algorithm: name of the algorithm to analyse
+    :param metric: one function from sklearn.metrics
+    :param verbose: wheter to print outputs
+    """
+    
     if df_files is None:
         df_files = pd.read_csv("%s/files.dat" % directory, index_col=[0], header=[0]).dropna(how='all', axis=0)
     if df_files.columns.isin(['disease_type']).any():
