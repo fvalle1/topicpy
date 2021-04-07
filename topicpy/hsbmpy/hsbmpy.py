@@ -626,7 +626,7 @@ def add_tumor_location(df_files):
         df_files.at[sample, 'disease_tissue'] = '%s[%s]' % (row['primary_site'], row['disease_type'])
 
 
-def get_scores(directory, labels, df_files=None, algorithm='topsbm', verbose=False):
+def get_scores(directory, labels, df_files=None, algorithm='topsbm', verbose=False, metric=metrics.cluster.v_measure_score):
     if df_files is None:
         df_files = pd.read_csv("%s/files.dat" % directory, index_col=[0], header=[0]).dropna(how='all', axis=0)
     if df_files.columns.isin(['disease_type']).any():
@@ -647,7 +647,7 @@ def get_scores(directory, labels, df_files=None, algorithm='topsbm', verbose=Fal
                                                               label=label)
                 scores[label]['h'].append(metrics.cluster.homogeneity_score(true_labels, predicted_labels))
                 scores[label]['c'].append(metrics.cluster.completeness_score(true_labels, predicted_labels))
-                scores[label]['V'].append(metrics.cluster.v_measure_score(true_labels, predicted_labels))
+                scores[label]['V'].append(metric(true_labels, predicted_labels))
                 xl.append(len(np.unique(predicted_labels)))
                 if verbose:
                     print(l)
@@ -665,7 +665,7 @@ def get_scores(directory, labels, df_files=None, algorithm='topsbm', verbose=Fal
             predicted_labels = np.ones_like(true_labels)
             scores[label]['h'].insert(idx, metrics.cluster.homogeneity_score(true_labels, predicted_labels))
             scores[label]['c'].insert(idx, metrics.cluster.completeness_score(true_labels, predicted_labels))
-            scores[label]['V'].insert(idx, metrics.cluster.v_measure_score(true_labels, predicted_labels))
+            scores[label]['V'].insert(idx, metric(true_labels, predicted_labels))
             xl.insert(idx, len(np.unique(predicted_labels)))
 
         scores[label]['xl'] = xl
@@ -688,7 +688,7 @@ def shuffle_files(df_files, label, random_state=42):
     return df_files_shuffled
 
 
-def get_scores_shuffled(directory, df_files, algorithm='topsbm', label='primary_site', verbose=False):
+def get_scores_shuffled(directory, df_files, algorithm='topsbm', label='primary_site', verbose=False, metric=metrics.cluster.v_measure_score):
     scores = {
         'h': [],
         'c': [],
@@ -713,7 +713,7 @@ def get_scores_shuffled(directory, df_files, algorithm='topsbm', label='primary_
                                            label=label)
             scores['h'].append(metrics.cluster.homogeneity_score(true_labels, predicted_labels))
             scores['c'].append(metrics.cluster.completeness_score(true_labels, predicted_labels))
-            scores['V'].append(metrics.cluster.v_measure_score(true_labels, predicted_labels))
+            scores['V'].append(metric(true_labels, predicted_labels))
             xl.append(len(np.unique(predicted_labels)))
     except:
         print(*sys.exc_info())
@@ -728,7 +728,7 @@ def get_scores_shuffled(directory, df_files, algorithm='topsbm', label='primary_
     predicted_labels = np.ones_like(true_labels)
     scores['h'].insert(idx, metrics.cluster.homogeneity_score(true_labels, predicted_labels))
     scores['c'].insert(idx, metrics.cluster.completeness_score(true_labels, predicted_labels))
-    scores['V'].insert(idx, metrics.cluster.v_measure_score(true_labels, predicted_labels))
+    scores['V'].insert(idx, metric(true_labels, predicted_labels))
     xl.insert(idx, len(np.unique(predicted_labels)))
 
     scores['xl'] = xl

@@ -8,4 +8,4 @@ import topicpy.tacos_plot
 import topicpy.TCGA_files
 import topicpy.converter
 
-__version__="0.1.0"
+__version__="0.2.0"
