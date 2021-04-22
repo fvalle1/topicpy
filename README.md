@@ -6,6 +6,11 @@
 # topicpy
 Python package for topic modelling pre and post processing
 
+# Install
+
+This is available trough [pip](https://pypi.org/project/topicpy/)
+`pip install topicpy`
+
 # Modules
 
 This package consists of multiple modules:
