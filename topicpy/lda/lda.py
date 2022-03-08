@@ -68,9 +68,7 @@ class lda(LatentDirichletAllocation):
 
     def full_analysis(self, directory, xl, tl=None, label='primary_site', logarithmise=False, round_data=False, *args, **kwargs) -> None:
         """
-
-        :param df:
-        :param directory:
+        :param directory: path to mainTable.csv and files.dat
         :param xl:
         :param tl:
         :param kwargs: argouments to LatentDirichletAllocation().fit_transform
