@@ -24,7 +24,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install pytest
-        pip install pandarallel sklearn tensorflow tensorflow_probability pandas matplotlib seaborn gseapy lxml
+        pip install pandarallel scikit-learn tensorflow tensorflow_probability pandas matplotlib seaborn gseapy lxml
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         python3 setup.py install
     - name: Test with pytest
