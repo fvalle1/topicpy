@@ -231,7 +231,7 @@ def get_fraction_sites(cluster, df_files, label='primary_site', normalise=False)
         'avg', axis=1).transpose()
     df = df.sort_values(
         by=[tissue for tissue in df.columns], axis=0, ascending=False)
-    return df.sort_index(1).to_dict(orient='list')
+    return df.sort_index(axis=1).to_dict(orient='list')
 
 
 def get_clustersinfo(cluster, fraction_sites):
@@ -813,7 +813,7 @@ def clusteranalysis(directory, labels, algorithm='topsbm') -> None:
     samples = samples[samples != "nan"]
     df_files = df_files.reindex(index=samples).dropna(how="all", axis=0).fillna("unknown")
     df_files_shuffled = df_files.copy()
-    df_files_shuffled.apply(lambda x: np.random.shuffle(x), 0)
+    df_files_shuffled.apply(lambda x: np.random.shuffle(x.values), 0)
     for normalise in [True, False]:
         for label in labels:
             for level in np.arange(l_max + 1)[::-1]:
