@@ -1,4 +1,7 @@
-0.0.2:
+0.2.0:
+- add custom metric
+
+0.1.0:
 - add painter
 
 0.0.1:

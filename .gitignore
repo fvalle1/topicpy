@@ -134,3 +134,5 @@ docs/_build
 .idea/inspectionProfiles/
 
 .idea/
+
+.vscode/*

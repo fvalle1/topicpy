@@ -6,6 +6,24 @@
 # topicpy
 Python package for topic modelling pre and post processing
 
+# Install
+
+This is available trough [pip](https://pypi.org/project/topicpy/)
+`pip install topicpy`
+
+# Modules
+
+This package consists of multiple modules:
+
+- converter: handels gene name conversions
+- geneontology: uses GSEA to perform gene ontologies
+- gtex: handle GTEx data
+- hsbmpy: handle ouput of hierarchical stochastic block model
+- hypergeom: perform hypergeometric tests
+- lda: Run sklearn LatenDirichletAllocation with some more parameters
+- tableanalyser: study distributions of a RNA-Seq data
+- TCGA_files: handle TCGA metadata
+
 # Documentation
 [https://topicpy.readthedocs.io/en/latest/](https://topicpy.readthedocs.io/en/latest/)
 

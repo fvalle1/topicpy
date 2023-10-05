@@ -199,7 +199,7 @@ def get_topic_given_l(l, directory, algorithm='topsbm'):
 def get_fraction_sites(cluster, df_files, label='primary_site', normalise=False):
     fraction_sites = {}
     c_fraction_site = {}
-    for site in df_files[label].dropna().unique():
+    for site in np.concatenate([df_files[label].dropna().unique(), ["unknown"]]):
         fraction_sites[site] = []
         c_fraction_site[site] = 0
 
@@ -209,12 +209,9 @@ def get_fraction_sites(cluster, df_files, label='primary_site', normalise=False)
             if foundsample is not None:
                 c_fraction_site[foundsample[label]] += 1
             else:
-                if 'unknown' in fraction_sites.keys():
-                    c_fraction_site['unknown'] += 1
-                else:
-                    c_fraction_site['unknown'] = 1
-                    fraction_sites['unknown'] = []
-        for site in fraction_sites:
+                c_fraction_site['unknown'] += 1
+
+        for site in fraction_sites.keys():
             if normalise:
                 norm = float(len(cluster[i]))
             else:
@@ -226,11 +223,14 @@ def get_fraction_sites(cluster, df_files, label='primary_site', normalise=False)
             c_fraction_site[site] = 0
     df = pd.DataFrame(data=fraction_sites).dropna(how='all', axis=0)
     ##put first columns that have high values in average
-    avgs = df.apply(lambda x: np.average(x.to_numpy()[x.to_numpy().nonzero()[0]]), axis=0)
+    avgs = df.apply(lambda x: np.average(
+        x.to_numpy()[x.to_numpy().nonzero()[0]]), axis=0)
     df = df.transpose()
     df.insert(0, 'avg', avgs)
-    df = df.sort_values(by=['avg'], axis=0, ascending=False).drop('avg', axis=1).transpose()
-    df = df.sort_values(by=[tissue for tissue in df.columns], axis=0, ascending=False)
+    df = df.sort_values(by=['avg'], axis=0, ascending=False).drop(
+        'avg', axis=1).transpose()
+    df = df.sort_values(
+        by=[tissue for tissue in df.columns], axis=0, ascending=False)
     return df.sort_index(1).to_dict(orient='list')
 
 
@@ -429,6 +429,7 @@ def add_score_lines(ax, scores, V="V", labels=None, h=False, c=False, alpha=0.8,
     colors = {
         'primary_site': 'blue',
         'hsbm': 'blue',
+        'trisbm': 'purple',
         'secondary_site': 'red',
         'status': 'red',
         'hSBM': 'blue',
@@ -626,7 +627,16 @@ def add_tumor_location(df_files):
         df_files.at[sample, 'disease_tissue'] = '%s[%s]' % (row['primary_site'], row['disease_type'])
 
 
-def get_scores(directory, labels, df_files=None, algorithm='topsbm', verbose=False):
+def get_scores(directory, labels, df_files=None, algorithm='topsbm', verbose=False, metric=metrics.cluster.v_measure_score):
+    """
+    :param directory: path to output
+    :param labels: name of df_files column
+    :param df_files: DataFrame of metadata
+    :param algorithm: name of the algorithm to analyse
+    :param metric: one function from sklearn.metrics
+    :param verbose: wheter to print outputs
+    """
+    
     if df_files is None:
         df_files = pd.read_csv("%s/files.dat" % directory, index_col=[0], header=[0]).dropna(how='all', axis=0)
     if df_files.columns.isin(['disease_type']).any():
@@ -647,7 +657,7 @@ def get_scores(directory, labels, df_files=None, algorithm='topsbm', verbose=Fal
                                                               label=label)
                 scores[label]['h'].append(metrics.cluster.homogeneity_score(true_labels, predicted_labels))
                 scores[label]['c'].append(metrics.cluster.completeness_score(true_labels, predicted_labels))
-                scores[label]['V'].append(metrics.cluster.v_measure_score(true_labels, predicted_labels))
+                scores[label]['V'].append(metric(true_labels, predicted_labels))
                 xl.append(len(np.unique(predicted_labels)))
                 if verbose:
                     print(l)
@@ -665,7 +675,7 @@ def get_scores(directory, labels, df_files=None, algorithm='topsbm', verbose=Fal
             predicted_labels = np.ones_like(true_labels)
             scores[label]['h'].insert(idx, metrics.cluster.homogeneity_score(true_labels, predicted_labels))
             scores[label]['c'].insert(idx, metrics.cluster.completeness_score(true_labels, predicted_labels))
-            scores[label]['V'].insert(idx, metrics.cluster.v_measure_score(true_labels, predicted_labels))
+            scores[label]['V'].insert(idx, metric(true_labels, predicted_labels))
             xl.insert(idx, len(np.unique(predicted_labels)))
 
         scores[label]['xl'] = xl
@@ -688,7 +698,7 @@ def shuffle_files(df_files, label, random_state=42):
     return df_files_shuffled
 
 
-def get_scores_shuffled(directory, df_files, algorithm='topsbm', label='primary_site', verbose=False):
+def get_scores_shuffled(directory, df_files, algorithm='topsbm', label='primary_site', verbose=False, metric=metrics.cluster.v_measure_score):
     scores = {
         'h': [],
         'c': [],
@@ -713,7 +723,7 @@ def get_scores_shuffled(directory, df_files, algorithm='topsbm', label='primary_
                                            label=label)
             scores['h'].append(metrics.cluster.homogeneity_score(true_labels, predicted_labels))
             scores['c'].append(metrics.cluster.completeness_score(true_labels, predicted_labels))
-            scores['V'].append(metrics.cluster.v_measure_score(true_labels, predicted_labels))
+            scores['V'].append(metric(true_labels, predicted_labels))
             xl.append(len(np.unique(predicted_labels)))
     except:
         print(*sys.exc_info())
@@ -728,7 +738,7 @@ def get_scores_shuffled(directory, df_files, algorithm='topsbm', label='primary_
     predicted_labels = np.ones_like(true_labels)
     scores['h'].insert(idx, metrics.cluster.homogeneity_score(true_labels, predicted_labels))
     scores['c'].insert(idx, metrics.cluster.completeness_score(true_labels, predicted_labels))
-    scores['V'].insert(idx, metrics.cluster.v_measure_score(true_labels, predicted_labels))
+    scores['V'].insert(idx, metric(true_labels, predicted_labels))
     xl.insert(idx, len(np.unique(predicted_labels)))
 
     scores['xl'] = xl
