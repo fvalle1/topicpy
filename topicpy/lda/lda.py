@@ -196,7 +196,7 @@ class lda(LatentDirichletAllocation):
             out = np.argmax(topics, axis=1)
 
             for c in np.arange(out.max() + 1)[::-1]:
-                c_objects = df.columns[np.argwhere(out == c)].T[0]
+                c_objects = df.columns.values[np.argwhere(out == c)].T[0]
                 df_clusters.insert(
                     0, "Cluster %d" %
                     (c + 1), np.concatenate(
