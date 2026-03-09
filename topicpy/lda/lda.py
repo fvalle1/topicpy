@@ -35,8 +35,16 @@ from topicpy.hsbmpy import get_file
 
 def kullbach_liebler(theta_k, theta_l):
     # dey-visualizing paper
-    return tf.subtract(tf.add(tf.math.multiply(theta_k, tf.math.log(tf.math.divide(theta_k, theta_l))), theta_l),
-                       theta_k)
+    return tf.subtract(
+        tf.add(
+            tf.math.multiply(
+                theta_k,
+                tf.math.log(
+                    tf.math.divide(
+                        theta_k,
+                        theta_l))),
+            theta_l),
+        theta_k)
 
 
 def distinctivness(theta_k):
@@ -50,9 +58,15 @@ class lda(LatentDirichletAllocation):
                  topic_word_prior=1,
                  doc_topic_prior=1,
                  random_state=42, **params):
-        super().__init__(self, learning_method=learning_method, max_doc_update_iter=max_doc_update_iter,
-                         topic_word_prior=topic_word_prior, doc_topic_prior=doc_topic_prior, max_iter=max_iter,
-                         random_state=random_state, **params)
+        super().__init__(
+            self,
+            learning_method=learning_method,
+            max_doc_update_iter=max_doc_update_iter,
+            topic_word_prior=topic_word_prior,
+            doc_topic_prior=doc_topic_prior,
+            max_iter=max_iter,
+            random_state=random_state,
+            **params)
         if self.verbose > 1:
             print("model created")
 
@@ -61,12 +75,21 @@ class lda(LatentDirichletAllocation):
         for sample in df.columns.values:
             try:
                 true_out.append(get_file(sample, df_files)[label])
-            except:
+            except BaseException:
                 print(sys.exc_info()[1])
                 true_out.append('')
         return true_out
 
-    def full_analysis(self, directory, xl, tl=None, label='primary_site', logarithmise=False, round_data=False, *args, **kwargs) -> None:
+    def full_analysis(
+            self,
+            directory,
+            xl,
+            tl=None,
+            label='primary_site',
+            logarithmise=False,
+            round_data=False,
+            *args,
+            **kwargs) -> None:
         """
         :param directory: path to mainTable.csv and files.dat
         :param xl:
@@ -83,10 +106,12 @@ class lda(LatentDirichletAllocation):
         }
         if tl is None:
             tl = xl
-        df = pd.read_csv("%s/mainTable.csv" % directory, index_col=[0], header=[0])
+        df = pd.read_csv(
+            "%s/mainTable.csv" %
+            directory, index_col=[0], header=[0])
         df.dropna(how="all", inplace=True)
         if logarithmise:
-            df = df.applymap(lambda count: np.log2(count+1))
+            df = df.applymap(lambda count: np.log2(count + 1))
         if round_data:
             df = df.astype(int)
         if self.verbose > 1:
@@ -114,32 +139,52 @@ class lda(LatentDirichletAllocation):
 
             # save word distr
             print("saving word-distr")
-            df_word_distr = pd.DataFrame(data=self.components_.T, index=df.index,
-                                         columns=["Topic %d" % (t + 1) for t in np.arange(ntopic)])
-            df_word_distr.to_csv("lda/lda_level_%d_word-dist.csv" % l, index=True, header=True)
+            df_word_distr = pd.DataFrame(
+                data=self.components_.T, index=df.index, columns=[
+                    "Topic %d" %
+                    (t + 1) for t in np.arange(ntopic)])
+            df_word_distr.to_csv(
+                "lda/lda_level_%d_word-dist.csv" %
+                l, index=True, header=True)
 
             # save topic distr
             print("saving topic-distr")
-            df_topic_distr = pd.DataFrame(data=topics, columns=["Topic %d" % (t + 1) for t in np.arange(ntopic)])
+            df_topic_distr = pd.DataFrame(
+                data=topics, columns=[
+                    "Topic %d" %
+                    (t + 1) for t in np.arange(ntopic)])
             df_topic_distr.insert(0, 'i_doc', np.arange(len(df.columns)))
             df_topic_distr.insert(1, 'doc', df.columns)
-            df_topic_distr.to_csv("lda/lda_level_%d_topic-dist.csv" % l, index=False, header=True)
+            df_topic_distr.to_csv(
+                "lda/lda_level_%d_topic-dist.csv" %
+                l, index=False, header=True)
             del df_topic_distr
 
             try:
                 # save topics
                 data = tf.convert_to_tensor(df_word_distr.transpose().values)
-                KL_tensor = tf.map_fn(fn=lambda k: tf.map_fn(fn=lambda l: kullbach_liebler(k, l), elems=data),
-                                      elems=data)
-                KL_tensor_min = tf.map_fn(distinctivness, tf.transpose(KL_tensor, perm=[2, 0, 1]))
+                KL_tensor = tf.map_fn(
+                    fn=lambda k: tf.map_fn(
+                        fn=lambda l: kullbach_liebler(
+                            k, l), elems=data), elems=data)
+                KL_tensor_min = tf.map_fn(
+                    distinctivness, tf.transpose(
+                        KL_tensor, perm=[
+                            2, 0, 1]))
                 out = KL_tensor_min.numpy()
-                df_D = pd.DataFrame(data=out, index=df_word_distr.index, columns=df_word_distr.columns)
-                df_topics = pd.DataFrame(columns=df_D.columns, index=np.arange(len(df_D.index)))
+                df_D = pd.DataFrame(
+                    data=out,
+                    index=df_word_distr.index,
+                    columns=df_word_distr.columns)
+                df_topics = pd.DataFrame(
+                    columns=df_D.columns, index=np.arange(len(df_D.index)))
                 for topic in df_D.columns:
-                    df_topics[topic] = df_D[topic].sort_values(ascending=False).index
-                df_topics.loc[:20, :].to_csv("%s/lda/lda_level_%d_topics.csv" % (directory, l), index=False)
+                    df_topics[topic] = df_D[topic].sort_values(
+                        ascending=False).index
+                df_topics.loc[:20, :].to_csv(
+                    "%s/lda/lda_level_%d_topics.csv" % (directory, l), index=False)
 
-            except:
+            except BaseException:
                 data = -1
                 print(*sys.exc_info())
 
@@ -152,10 +197,16 @@ class lda(LatentDirichletAllocation):
 
             for c in np.arange(out.max() + 1)[::-1]:
                 c_objects = df.columns[np.argwhere(out == c)].T[0]
-                df_clusters.insert(0, "Cluster %d" % (c + 1), np.concatenate(
-                    (c_objects, [np.nan for _ in np.arange(total_objects - len(c_objects))])))
+                df_clusters.insert(
+                    0, "Cluster %d" %
+                    (c + 1), np.concatenate(
+                        (c_objects, [
+                            np.nan for _ in np.arange(
+                                total_objects - len(c_objects))])))
             df_clusters.dropna(axis=0, how='all', inplace=True)
-            df_clusters.to_csv("lda/lda_level_%d_clusters.csv" % (l), index=False, header=True)
+            df_clusters.to_csv(
+                "lda/lda_level_%d_clusters.csv" %
+                (l), index=False, header=True)
 
             # metrics
             print("saving metrics")

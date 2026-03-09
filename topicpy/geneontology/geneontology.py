@@ -31,16 +31,21 @@ import matplotlib.pyplot as plt
 from topicpy.tableanalyser import get_symbol
 
 
-def get_ontology_df(topic, cutoff=0.05, threshhold=5e-1, gene_sets = ['GO_Molecular_Function_2018',
-             'GO_Biological_Process_2018',
-             'GO_Cellular_Component_2018',
-             'Human_Phenotype_Ontology',
-             'GTEx_Tissue_Sample_Gene_Expression_Profiles_up',
-             'GTEx_Tissue_Sample_Gene_Expression_Profiles_down',
-             'Tissue_Protein_Expression_from_Human_Proteome_Map',
-             'KEGG_2019_Human',
-             'NCI-60_Cancer_Cell_Lines'
-            ], background=None) -> pd.DataFrame:
+def get_ontology_df(
+        topic,
+        cutoff=0.05,
+        threshhold=5e-1,
+        gene_sets=[
+            'GO_Molecular_Function_2018',
+            'GO_Biological_Process_2018',
+            'GO_Cellular_Component_2018',
+            'Human_Phenotype_Ontology',
+            'GTEx_Tissue_Sample_Gene_Expression_Profiles_up',
+            'GTEx_Tissue_Sample_Gene_Expression_Profiles_down',
+            'Tissue_Protein_Expression_from_Human_Proteome_Map',
+            'KEGG_2019_Human',
+            'NCI-60_Cancer_Cell_Lines'],
+        background=None) -> pd.DataFrame:
     """
 
     :param topic: list of genes
@@ -51,10 +56,15 @@ def get_ontology_df(topic, cutoff=0.05, threshhold=5e-1, gene_sets = ['GO_Molecu
     """
     sets = ','.join(gene_sets)
     if background is None:
-        background='hsapiens_gene_ensembl'
-    topic = [g for g in topic if str(g)!='nan']
-    gene_ontology = gs.enrichr(list(topic), gene_sets=sets, cutoff=cutoff, background=background).results
-    return gene_ontology[gene_ontology['Adjusted P-value'] < threshhold][['Term', 'Adjusted P-value', 'Gene_set']]
+        background = 'hsapiens_gene_ensembl'
+    topic = [g for g in topic if str(g) != 'nan']
+    gene_ontology = gs.enrichr(
+        list(topic),
+        gene_sets=sets,
+        cutoff=cutoff,
+        background=background).results
+    return gene_ontology[gene_ontology['Adjusted P-value']
+                         < threshhold][['Term', 'Adjusted P-value', 'Gene_set']]
 
 
 def ensg_to_symbol(series):
@@ -67,10 +77,10 @@ def ensg_to_symbol(series):
     for g in series:
         try:
             symbols.append(get_symbol(g))
-        except:
+        except BaseException:
             print(*sys.exc_info())
     symbols = np.array(symbols)
-    return symbols[[s!='nan' for s in symbols]]
+    return symbols[[s != 'nan' for s in symbols]]
 
 
 def save_plot_Pvalues(df_topics, l, directory, algorithm):
@@ -84,20 +94,22 @@ def save_plot_Pvalues(df_topics, l, directory, algorithm):
     topic_gos = []
     for itopic, topic in enumerate(df_topics.columns):
         try:
-            enriched_topic = pd.read_csv("%s/%s/gsea_level_%d_topic_%d.csv" % (directory, algorithm, l, itopic+1))
+            enriched_topic = pd.read_csv(
+                "%s/%s/gsea_level_%d_topic_%d.csv" %
+                (directory, algorithm, l, itopic + 1))
             if len(enriched_topic.index) > 0:
                 p_val = np.sort(enriched_topic['Adjusted P-value'])[0]
                 topic_pvalues.append(-np.log10(p_val))
                 for goc in enriched_topic['Gene_set'][:10].unique():
                     topic_gos.append(goc)
-        except:
+        except BaseException:
             print(*sys.exc_info())
 
     fig = plt.figure()
-    #x = np.arange(1, 1 + len(topic_pvalues))
+    # x = np.arange(1, 1 + len(topic_pvalues))
     c, _, _ = plt.hist(topic_pvalues, histtype='step', lw=2)
-    plt.plot([-np.log10(0.05) for _ in np.linspace(1, 10, num=10)], np.arange(0, np.max(c) + 5, (np.max(c) + 5) / 10),
-             ls='--', lw=5, label="$\\alpha=0.05$")
+    plt.plot([-np.log10(0.05) for _ in np.linspace(1, 10, num=10)], np.arange(0,
+             np.max(c) + 5, (np.max(c) + 5) / 10), ls='--', lw=5, label="$\\alpha=0.05$")
     plt.xlabel('-log(P-value)', fontsize=20)
     plt.ylabel("number of topics", fontsize=20)
     # plt.ylim(0,0.055)
@@ -108,15 +120,20 @@ def save_plot_Pvalues(df_topics, l, directory, algorithm):
     fig = plt.figure(figsize=(20, 10))
     gos, goscounts = np.unique(topic_gos, return_counts=True)
     from textwrap import wrap
-    plt.barh(["\n".join(wrap(str(l).replace('_', ' '), 20)) for l in gos], goscounts)
+    plt.barh(["\n".join(wrap(str(l).replace('_', ' '), 20))
+             for l in gos], goscounts)
     plt.yticks(fontsize=15)
     plt.show()
     fig.savefig("%s/pvaluecategories(%d).pdf" % (directory, l))
 
 
-
-
-def topic_analysis(directory, l, algorithm="topsbm", background=None, verbose=True, save_Pvalues=True):
+def topic_analysis(
+        directory,
+        l,
+        algorithm="topsbm",
+        background=None,
+        verbose=True,
+        save_Pvalues=True):
     """
 
     :param directory: where to find files
@@ -126,21 +143,29 @@ def topic_analysis(directory, l, algorithm="topsbm", background=None, verbose=Tr
     :param verbose: verbosity
     :param save_Pvalues: save data for P-values plot
     """
-    df_topics = pd.read_csv("%s/%s/%s_level_%d_topics.csv" % (directory, algorithm, algorithm, l))
+    df_topics = pd.read_csv(
+        "%s/%s/%s_level_%d_topics.csv" %
+        (directory, algorithm, algorithm, l))
     enriched_topic = None
     for itopic, topic in enumerate(df_topics.columns):
         try:
-            enriched_topic = pd.read_csv("%s/%s/gsea_level_%d_topic_%d.csv" % (directory, algorithm, l, itopic+1), index_col=[0])
+            enriched_topic = pd.read_csv(
+                "%s/%s/gsea_level_%d_topic_%d.csv" %
+                (directory, algorithm, l, itopic + 1), index_col=[0])
             print(topic)
-        except:
+        except BaseException:
             try:
-                symbols = ensg_to_symbol(df_topics.loc[:, topic].dropna().values)
+                symbols = ensg_to_symbol(
+                    df_topics.loc[:, topic].dropna().values)
                 print(topic)
-                enriched_topic = get_ontology_df(symbols, background=background).sort_values(by=['Adjusted P-value'],
-                                                                                             ascending=True)
+                enriched_topic = get_ontology_df(
+                    symbols, background=background).sort_values(
+                    by=['Adjusted P-value'], ascending=True)
                 enriched_topic = enriched_topic.loc[enriched_topic.index.values[:20], :]
-                enriched_topic.to_csv("%s/%s/gsea_level_%d_topic_%d.csv" % (directory, algorithm, l, itopic+1))
-            except:
+                enriched_topic.to_csv(
+                    "%s/%s/gsea_level_%d_topic_%d.csv" %
+                    (directory, algorithm, l, itopic + 1))
+            except BaseException:
                 print(*sys.exc_info())
         if verbose:
             print(enriched_topic)

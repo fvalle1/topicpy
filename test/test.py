@@ -1,6 +1,8 @@
 import unittest
 import topicpy
-import ssl;ssl._create_default_https_context=ssl._create_unverified_context
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
+
 
 class TopicTest(unittest.TestCase):
     def test_load(self):
@@ -10,10 +12,28 @@ class TopicTest(unittest.TestCase):
     def test_hypergeom(self):
         import pandas as pd
         from topicpy.hypergeom import parameters_for_hypergeometric
-        l1 = pd.Series(index=["ENSG00000000123", "ENSG00000000456", "ENSG00000000789", "ENSG00000000XXX"],
-                       data=["c1", "c1", "c1", "c2"], dtype=str)
-        l2 = pd.Series(index=["ENSG00000000123", "ENSG00000000456", "ENSG00000000789"], data=["c1", "c1", "c1"],
-                       dtype=str)
+        l1 = pd.Series(
+            index=[
+                "ENSG00000000123",
+                "ENSG00000000456",
+                "ENSG00000000789",
+                "ENSG00000000XXX"],
+            data=[
+                "c1",
+                "c1",
+                "c1",
+                "c2"],
+            dtype=str)
+        l2 = pd.Series(
+            index=[
+                "ENSG00000000123",
+                "ENSG00000000456",
+                "ENSG00000000789"],
+            data=[
+                "c1",
+                "c1",
+                "c1"],
+            dtype=str)
         x, m, k, n, _ = parameters_for_hypergeometric(l1, l2)
         self.assertEqual(m, 3)
         self.assertEqual(k["c1"], 3)
